@@ -47,7 +47,7 @@ function draw() {
         case "DEFAULT":
             break;
         case "CREATING_SHAPE":
-            drawCreatingShape();
+            drawShapeCreation();
             break;
         case "CREATING_RAY":
             break;
@@ -70,7 +70,7 @@ function drawFinishedShapes() {
 }
 
 // Representa a forma que está atualmente sendo desenhada pelo usuário
-function drawCreatingShape(){
+function drawShapeCreation(){
     beginShape();
     for (var v = 0; v < shapeVertexList.length; v += 2){
         vertex(shapeVertexList[v], shapeVertexList[v+1]);
