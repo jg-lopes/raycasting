@@ -8,14 +8,18 @@ let state = "DEFAULT"
 
 class Ray {
     
-    constructor(x_coord, y_coord) {
-        this.x = x_coord;
-        this.y = y_coord;
+    constructor() {
         // Define o estado da construção do raio
         // POSITION = processo de definir posição
         // DIRECTION = processo de definir direção
         // DONE = raio já construído
         this.state = "POSITION";
+    }
+
+    addOrigin(x_coord, y_coord) {
+        this.x = x_coord;
+        this.y = y_coord;
+        this.state = "DIRECTION";
     }
 
     drawRay(){
@@ -36,13 +40,12 @@ let rayList = [];
 // Vazia se uma forma não está sendo desenhada
 let shapeVertexList = [];
 
+let rayInConstruction = new Ray();
 
 function setup() {
     createCanvas(640, 480); 
     background(200); 
 
-    let sampleRay = new Ray(50, 50);
-    rayList.push(sampleRay);
 }
 
 function draw() {
@@ -62,6 +65,8 @@ function draw() {
             drawShapeCreation();
             break;
         case "CREATING_RAY":
+            if (rayInConstruction.state == "POSITION")
+                circle(mouseX, mouseY, 10);
             break;
         case "EDIT":
             break; 
@@ -130,6 +135,11 @@ function mousePressed() {
             shapeVertexList.push(mouseX, mouseY);
             break;
         case "CREATING_RAY":
+            if (rayInConstruction.state == "POSITION")
+                rayInConstruction.addOrigin(mouseX, mouseY);
+
+            rayList.push(rayInConstruction);
+            rayInConstruction = new Ray();
             break;
         case "EDIT":
             break; 
