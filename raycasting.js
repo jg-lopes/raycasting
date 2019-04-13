@@ -9,6 +9,17 @@ let creatingShape = false;
 // EDIT = usuário está no processo de edição 
 let state = "DEFAULT"
 
+// switch (state) {
+//     case "DEFAULT":
+//         break;
+//     case "CREATING_SHAPE":
+//         break;
+//     case "CREATING_RAY":
+//         break;
+//     case "EDIT":
+//         break; 
+// }
+
 // Armazena todas as formas anteriormente desenhadas pelo usuário
 // Cada índice representa uma shapeVertexList
 let shapeList = [];
@@ -27,13 +38,21 @@ function draw() {
     
     background(200);     
 
-    let colora = color(0, 50);
-    fill(colora);
+    let c = color(0, 50);
+    fill(c);
     
     drawFinishedShapes();
 
-    if (creatingShape == true){
-        drawCreatingShape();
+    switch (state) {
+        case "DEFAULT":
+            break;
+        case "CREATING_SHAPE":
+            drawCreatingShape();
+            break;
+        case "CREATING_RAY":
+            break;
+        case "EDIT":
+            break; 
     }
 
     debug();
@@ -61,20 +80,46 @@ function drawCreatingShape(){
 }
 
 function debug() {
-    document.getElementById("criandoPoligono").innerHTML = creatingShape;
+    document.getElementById("state").innerHTML = state;
 }
 
 function mousePressed() {
-    // Indica que o usuário quer desenhar uma figura e armazena o ponto atual do cursor como vértice a se desenhar
-    creatingShape = true;
-    shapeVertexList.push(mouseX, mouseY);
+    
+    switch (state) {
+        case "DEFAULT":
+            state = "CREATING_SHAPE";
+            // Indica que o usuário quer desenhar uma figura e armazena o ponto atual do cursor como vértice a se desenhar
+            shapeVertexList.push(mouseX, mouseY);
+            break;
+        case "CREATING_SHAPE":
+            // Indica que o usuário quer desenhar uma figura e armazena o ponto atual do cursor como vértice a se desenhar
+            shapeVertexList.push(mouseX, mouseY);
+            break;
+        case "CREATING_RAY":
+            break;
+        case "EDIT":
+            break; 
+    }
+    
 }
 
 function doubleClicked() {
-    // Salva a forma dentro de lista de formas, removendo o último vértice pois ele representa o segundo click do double-click
-    shapeList.push(shapeVertexList.slice(0, -2));
+    
+    switch (state) {
+        case "DEFAULT":
+            break;
+        case "CREATING_SHAPE":
+            // Salva a forma dentro de lista de formas, removendo o último vértice pois ele representa o segundo click do double-click
+            shapeList.push(shapeVertexList.slice(0, -2));
 
-    // Termina o desenho da forma
-    creatingShape = false;
-    shapeVertexList = [];
+            // Termina o desenho da forma, apagando a memória e redefinindo o estado
+            shapeVertexList = [];
+            state = "DEFAULT";
+            break;
+        case "CREATING_RAY":
+            break;
+        case "EDIT":
+            break; 
+    }
+    
 }
