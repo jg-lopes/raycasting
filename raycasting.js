@@ -83,6 +83,24 @@ function debug() {
     document.getElementById("state").innerHTML = state;
 }
 
+function keyPressed() {
+    console.log(key);
+    switch (key) {
+        case 'a':
+            state = "DEFAULT";
+            break;
+        case 's':
+            state = "CREATING_SHAPE";
+            break;
+        case 'd':
+            state = "CREATING_RAY";
+            break;
+        case 'f':
+            state = "EDIT";
+            break;
+    }
+}
+
 function mousePressed() {
     
     switch (state) {
