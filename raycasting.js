@@ -1,6 +1,3 @@
-// Determina se o sistema está em modo de criação de polígono
-let creatingShape = false;
-
 // Define o estado do programa
 // Lista de estados:
 // DEFAULT = estado padrão, nada está sendo construído
@@ -9,29 +6,43 @@ let creatingShape = false;
 // EDIT = usuário está no processo de edição 
 let state = "DEFAULT"
 
-// switch (state) {
-//     case "DEFAULT":
-//         break;
-//     case "CREATING_SHAPE":
-//         break;
-//     case "CREATING_RAY":
-//         break;
-//     case "EDIT":
-//         break; 
-// }
+class Ray {
+    
+    constructor(x_coord, y_coord) {
+        this.x = x_coord;
+        this.y = y_coord;
+        // Define o estado da construção do raio
+        // POSITION = processo de definir posição
+        // DIRECTION = processo de definir direção
+        // DONE = raio já construído
+        this.state = "POSITION";
+    }
+
+    drawRay(){
+        circle(this.x, this.y, 10);
+    }
+}
 
 // Armazena todas as formas anteriormente desenhadas pelo usuário
 // Cada índice representa uma shapeVertexList
 let shapeList = [];
+
+// Armazena todas os raios anteriormente desenhados pelo usuário
+// Cada índice representa um objeto Ray
+let rayList = [];
 
 // Lista representando os pontos da forma sendo desenhada atualmente
 // Entradas alternas entre valores x e y de um vértice, logo um vértice ocupa 2 entradas
 // Vazia se uma forma não está sendo desenhada
 let shapeVertexList = [];
 
+
 function setup() {
     createCanvas(640, 480); 
     background(200); 
+
+    let sampleRay = new Ray(50, 50);
+    rayList.push(sampleRay);
 }
 
 function draw() {
@@ -42,6 +53,7 @@ function draw() {
     fill(c);
     
     drawFinishedShapes();
+    drawFinishedRays(); 
 
     switch (state) {
         case "DEFAULT":
@@ -69,6 +81,12 @@ function drawFinishedShapes() {
     }
 }
 
+function drawFinishedRays(){
+    for (var r = 0; r < rayList.length; r++) {
+        rayList[r].drawRay();
+    }
+}
+
 // Representa a forma que está atualmente sendo desenhada pelo usuário
 function drawShapeCreation(){
     beginShape();
@@ -78,6 +96,7 @@ function drawShapeCreation(){
     vertex(mouseX, mouseY);
     endShape(CLOSE);
 }
+
 
 function debug() {
     document.getElementById("state").innerHTML = state;
@@ -105,9 +124,6 @@ function mousePressed() {
     
     switch (state) {
         case "DEFAULT":
-            state = "CREATING_SHAPE";
-            // Indica que o usuário quer desenhar uma figura e armazena o ponto atual do cursor como vértice a se desenhar
-            shapeVertexList.push(mouseX, mouseY);
             break;
         case "CREATING_SHAPE":
             // Indica que o usuário quer desenhar uma figura e armazena o ponto atual do cursor como vértice a se desenhar
