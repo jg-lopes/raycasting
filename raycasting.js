@@ -137,6 +137,11 @@ function draw() {
 
     let c = color(0, 50);
     fill(c);
+
+    line(50,50, 100, 100);
+    line(50,100, 100, 50);
+
+    lineIntersection([50,50], [100,100], [50,100], [100,50]);
     
     drawFinishedPolygons();
     drawFinishedRays(); 
@@ -263,7 +268,7 @@ function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
         circleX = x1 + (ua * (x2 - x1));
         circleY = y1 + (ua * (y2 - y1));
     
-        circle(intersectionX,intersectionY, 20);
+        circle(circleX,circleY, 20);
     }
 }
 
