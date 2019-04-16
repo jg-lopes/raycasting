@@ -1,19 +1,24 @@
+// Define a classe que encapsulará o raio
 class Ray {
-
+    
+    // Define o estado da construção do raio
     constructor() {
-        // Define o estado da construção do raio
         // POSITION = processo de definir posição
         // DIRECTION = processo de definir direção
         // DONE = raio já construído
         this.state = "POSITION";
     }
 
+    // Insere a origem do raio (APENAS CHAMADA DURANTE POSITION)
+    // Recebe as coordenadas de origem
     addOrigin(x_coord, y_coord) {
         this.x = x_coord;
         this.y = y_coord;
         this.state = "DIRECTION";
     }
 
+    // Insere a direção do raio (APENAS CHAMADA DURANTE DIRECTION)
+    // Recebe as coordenadas 
     addRay(x_coord, y_coord) {
         this.angle = atan2(y_coord - this.y, x_coord - this.x);
         this.ray_endX = this.x + cos(this.angle) * max_size;
@@ -226,6 +231,40 @@ function doubleClicked() {
             break; 
     }
     
+}
+
+function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
+    // Fonte para a teoria matemática por trás da função: http://paulbourke.net/geometry/pointlineplane/
+
+    x1 = l1_start[0];
+    x2 = l1_end[0];
+    x3 = l2_start[0];
+    x4 = l2_end[0];
+
+    y1 = l1_start[1];
+    y2 = l1_end[1];
+    y3 = l2_start[1];
+    y4 = l2_end[1];
+
+    ua_numerator = (x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3);
+    ua_denominator = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
+
+    ub_numerator = (x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3);
+    ub_denominator = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1)
+
+    ua = ua_numerator / ua_denominator;
+    ub = ub_numerator / ub_denominator;
+
+    // Das anotações
+    // The equations apply to lines, if the intersection of line segments is required then it is only necessary to test if ua and ub lie between 0 and 1. 
+    // Whichever one lies within that range then the corresponding line segment contains the intersection point. If both lie within the range of 0 to 1 then the intersection point is within both line segments.
+
+    if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
+        circleX = x1 + (ua * (x2 - x1));
+        circleY = y1 + (ua * (y2 - y1));
+    
+        circle(intersectionX,intersectionY, 20);
+    }
 }
 
 function debug() {
