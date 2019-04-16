@@ -23,9 +23,9 @@ class Ray {
     }
 
     addRay(x_coord, y_coord) {
-        this.angle = atan2(x_coord - rayInConstruction.y, y_coord - rayInConstruction.x);
-        this.ray_endX = rayInConstruction.x + cos(angle) * max_size;
-        this.ray_endY = rayInConstruction.y + sin(angle) * max_size;
+        this.angle = atan2(y_coord - this.y, x_coord - this.x);
+        this.ray_endX = this.x + cos(this.angle) * max_size;
+        this.ray_endY = this.y + sin(this.angle) * max_size;
 
         this.state = "DONE";
 
@@ -33,10 +33,31 @@ class Ray {
         rayInConstruction = new Ray();    
     }
 
-    drawRay(){
+    drawRayConstruction(){
+        
+        switch (this.state) {
+            case "POSITION":
+                circle(mouseX, mouseY, 10);
+
+                break;
+            case "DIRECTION":
+                circle(this.x, this.y, 10);
+                
+                var temp_angle = atan2(mouseY - this.y, mouseX - this.x);
+                var temp_endX = this.x + cos(temp_angle) * max_size;
+                var temp_endY = this.y + sin(temp_angle) * max_size;
+                
+                line(this.x, this.y, temp_endX, temp_endY);
+                
+                break;
+        }
+    }
+
+    drawRay() {
         circle(this.x, this.y, 10);
         line(this.x, this.y, this.ray_endX, this.ray_endY);
     }
+
 }
 
 // Armazena todas as formas anteriormente desenhadas pelo usuário
@@ -74,25 +95,15 @@ function draw() {
     switch (state) {
         case "DEFAULT":
             break;
+
         case "CREATING_SHAPE":
             drawShapeCreation();
             break;
+
         case "CREATING_RAY":
+            rayInConstruction.drawRayConstruction();
+            break;
             
-            switch (rayInConstruction.state) {
-                case "POSITION":
-                    circle(mouseX, mouseY, 10);
-                    break;
-                case "DIRECTION":
-                    circle(rayInConstruction.x, rayInConstruction.y, 10);
-                    angle = atan2(mouseY - rayInConstruction.y, mouseX - rayInConstruction.x);
-                    line_endX = rayInConstruction.x + cos(angle) * max_size;
-                    line_endY = rayInConstruction.y + sin(angle) * max_size;
-                    line(rayInConstruction.x, rayInConstruction.y, line_endX, line_endY);
-                    break;
-                case "DONE":
-                    break;    
-            }
         case "EDIT":
             break; 
     }
