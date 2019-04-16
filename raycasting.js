@@ -7,7 +7,7 @@
 let state = "DEFAULT"
 
 class Ray {
-    
+
     constructor() {
         // Define o estado da construção do raio
         // POSITION = processo de definir posição
@@ -22,8 +22,20 @@ class Ray {
         this.state = "DIRECTION";
     }
 
+    addRay(x_coord, y_coord) {
+        this.angle = atan2(x_coord - rayInConstruction.y, y_coord - rayInConstruction.x);
+        this.ray_endX = rayInConstruction.x + cos(angle) * max_size;
+        this.ray_endY = rayInConstruction.y + sin(angle) * max_size;
+
+        this.state = "DONE";
+
+        rayList.push(rayInConstruction);
+        rayInConstruction = new Ray();    
+    }
+
     drawRay(){
         circle(this.x, this.y, 10);
+        line(this.x, this.y, this.ray_endX, this.ray_endY);
     }
 }
 
@@ -46,6 +58,7 @@ function setup() {
     createCanvas(640, 480); 
     background(200); 
 
+    max_size = max(width, height);
 }
 
 function draw() {
@@ -65,9 +78,21 @@ function draw() {
             drawShapeCreation();
             break;
         case "CREATING_RAY":
-            if (rayInConstruction.state == "POSITION")
-                circle(mouseX, mouseY, 10);
-            break;
+            
+            switch (rayInConstruction.state) {
+                case "POSITION":
+                    circle(mouseX, mouseY, 10);
+                    break;
+                case "DIRECTION":
+                    circle(rayInConstruction.x, rayInConstruction.y, 10);
+                    angle = atan2(mouseY - rayInConstruction.y, mouseX - rayInConstruction.x);
+                    line_endX = rayInConstruction.x + cos(angle) * max_size;
+                    line_endY = rayInConstruction.y + sin(angle) * max_size;
+                    line(rayInConstruction.x, rayInConstruction.y, line_endX, line_endY);
+                    break;
+                case "DONE":
+                    break;    
+            }
         case "EDIT":
             break; 
     }
@@ -135,12 +160,16 @@ function mousePressed() {
             shapeVertexList.push(mouseX, mouseY);
             break;
         case "CREATING_RAY":
-            if (rayInConstruction.state == "POSITION")
-                rayInConstruction.addOrigin(mouseX, mouseY);
 
-            rayList.push(rayInConstruction);
-            rayInConstruction = new Ray();
-            break;
+            switch (rayInConstruction.state) {
+                case "POSITION":
+                    rayInConstruction.addOrigin(mouseX, mouseY);
+                    break;
+                case "DIRECTION":
+                    rayInConstruction.addRay(mouseX, mouseY);
+                    break;
+            }
+
         case "EDIT":
             break; 
     }
