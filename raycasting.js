@@ -1,11 +1,3 @@
-// Define o estado do programa
-// Lista de estados:
-// DEFAULT = estado padrão, nada está sendo construído
-// CREATING_SHAPE = usuário está no processo de criar uma forma
-// CREATING_RAY = usuário está no processo de criar um raio
-// EDIT = usuário está no processo de edição 
-let state = "DEFAULT"
-
 class Ray {
 
     constructor() {
@@ -28,10 +20,10 @@ class Ray {
         this.ray_endY = this.y + sin(this.angle) * max_size;
 
         this.state = "DONE";
-
-        rayList.push(rayInConstruction);
-        rayInConstruction = new Ray();    
+        
+        this.finishConstruction();
     }
+
 
     drawRayConstruction(){
         
@@ -58,22 +50,74 @@ class Ray {
         line(this.x, this.y, this.ray_endX, this.ray_endY);
     }
 
+    finishConstruction() {
+
+        rayList.push(rayInConstruction);
+        rayInConstruction = new Ray();  
+
+    }
+
 }
+
+class Polygon {
+
+    constructor() {
+        this.vertex_list = [];
+    }
+
+    addVertex(x_coord, y_coord) {
+        this.vertex_list.push([x_coord, y_coord]);
+    }
+
+    drawPolygon() {
+        beginShape();
+        for (var v = 0; v < this.vertex_list.length; v++){
+            vertex(this.vertex_list[v][0], this.vertex_list[v][1]);
+        }
+        endShape(CLOSE); 
+    }
+
+
+
+    // Métodos chamados apenas durante a construção do polígono
+
+    drawPolygonConstruction() {
+        beginShape();
+        for (var v = 0; v < this.vertex_list.length; v++){
+            vertex(this.vertex_list[v][0], this.vertex_list[v][1]);
+        }
+        vertex(mouseX, mouseY);
+        endShape(CLOSE);    
+    }
+
+    finishConstruction() {
+
+        polygonList.push(polygonInConstruction);
+        polygonInConstruction = new Polygon();  
+
+    }
+
+}
+
+// Define o estado do programa
+// Lista de estados:
+// DEFAULT = estado padrão, nada está sendo construído
+// CREATING_SHAPE = usuário está no processo de criar uma forma
+// CREATING_RAY = usuário está no processo de criar um raio
+// EDIT = usuário está no processo de edição 
+let state = "DEFAULT"
 
 // Armazena todas as formas anteriormente desenhadas pelo usuário
 // Cada índice representa uma shapeVertexList
-let shapeList = [];
+let polygonList = [];
 
 // Armazena todas os raios anteriormente desenhados pelo usuário
 // Cada índice representa um objeto Ray
 let rayList = [];
 
-// Lista representando os pontos da forma sendo desenhada atualmente
-// Entradas alternas entre valores x e y de um vértice, logo um vértice ocupa 2 entradas
-// Vazia se uma forma não está sendo desenhada
-let shapeVertexList = [];
-
+// Armazenam objetos que estão temporáriamente em construção
 let rayInConstruction = new Ray();
+let polygonInConstruction = new Polygon();
 
 function setup() {
     createCanvas(640, 480); 
@@ -89,7 +133,7 @@ function draw() {
     let c = color(0, 50);
     fill(c);
     
-    drawFinishedShapes();
+    drawFinishedPolygons();
     drawFinishedRays(); 
 
     switch (state) {
@@ -97,7 +141,7 @@ function draw() {
             break;
 
         case "CREATING_SHAPE":
-            drawShapeCreation();
+            polygonInConstruction.drawPolygonConstruction();
             break;
 
         case "CREATING_RAY":
@@ -111,14 +155,9 @@ function draw() {
     debug();
 }
 
-// Representa na tela as formas que já foram desenhadas pelo usuário
-function drawFinishedShapes() {
-    for (var i = 0; i < shapeList.length; i += 1){
-        beginShape();
-        for (var v = 0; v < shapeList[i].length; v += 2){
-            vertex(shapeList[i][v], shapeList[i][v+1]);
-        }
-        endShape(CLOSE);
+function drawFinishedPolygons() {
+    for (var i = 0; i < polygonList.length; i++) {
+        polygonList[i].drawPolygon();
     }
 }
 
@@ -126,21 +165,6 @@ function drawFinishedRays(){
     for (var r = 0; r < rayList.length; r++) {
         rayList[r].drawRay();
     }
-}
-
-// Representa a forma que está atualmente sendo desenhada pelo usuário
-function drawShapeCreation(){
-    beginShape();
-    for (var v = 0; v < shapeVertexList.length; v += 2){
-        vertex(shapeVertexList[v], shapeVertexList[v+1]);
-    }
-    vertex(mouseX, mouseY);
-    endShape(CLOSE);
-}
-
-
-function debug() {
-    document.getElementById("state").innerHTML = state;
 }
 
 function keyPressed() {
@@ -168,7 +192,7 @@ function mousePressed() {
             break;
         case "CREATING_SHAPE":
             // Indica que o usuário quer desenhar uma figura e armazena o ponto atual do cursor como vértice a se desenhar
-            shapeVertexList.push(mouseX, mouseY);
+            polygonInConstruction.addVertex(mouseX, mouseY);
             break;
         case "CREATING_RAY":
 
@@ -193,12 +217,8 @@ function doubleClicked() {
         case "DEFAULT":
             break;
         case "CREATING_SHAPE":
-            // Salva a forma dentro de lista de formas, removendo o último vértice pois ele representa o segundo click do double-click
-            shapeList.push(shapeVertexList.slice(0, -2));
-
-            // Termina o desenho da forma, apagando a memória e redefinindo o estado
-            shapeVertexList = [];
-            state = "DEFAULT";
+            // Chama o método que finaliza a construção do polígono
+            polygonInConstruction.finishConstruction();
             break;
         case "CREATING_RAY":
             break;
@@ -206,4 +226,8 @@ function doubleClicked() {
             break; 
     }
     
+}
+
+function debug() {
+    document.getElementById("state").innerHTML = state;
 }
