@@ -20,7 +20,12 @@ class Ray {
     // Insere a direção do raio (APENAS CHAMADA DURANTE DIRECTION)
     // Recebe as coordenadas 
     addRay(x_coord, y_coord) {
+
+        // Angulo do raio em relação à horizontal
         this.angle = atan2(y_coord - this.y, x_coord - this.x);
+
+        // Pontos "finais" do raio, necessários para o desenho
+        // Multiplicados por 5 * max_size (maior dimensão da tela) para dar a ilusão que o raio é infinito
         this.ray_endX = this.x + cos(this.angle) * max_size * 5;
         this.ray_endY = this.y + sin(this.angle) * max_size * 5;
 
@@ -29,9 +34,21 @@ class Ray {
         this.finishConstruction();
     }
 
+    // Desenha o raio já construído no display
+    drawRay() {
+        circle(this.x, this.y, 10);
+        line(this.x, this.y, this.ray_endX, this.ray_endY);
+    }
 
+
+    // Retorna a linha da origem do raio até o ponto de fim do raio (fora da tela)
+    getRayLine() {
+        return [[this.x, this.y], [this.ray_endX, this.ray_endY]];
+    }
+
+
+    // Estabelece o desenho do raío ainda em construção
     drawRayConstruction(){
-        
         switch (this.state) {
             case "POSITION":
                 circle(mouseX, mouseY, 10);
@@ -50,22 +67,11 @@ class Ray {
         }
     }
 
-    drawRay() {
-        circle(this.x, this.y, 10);
-        line(this.x, this.y, this.ray_endX, this.ray_endY);
-    }
-
+    // Termina a construção do raio
     finishConstruction() {
-
         rayList.push(rayInConstruction);
         rayInConstruction = new Ray();  
-
     }
-
-    getRayLine() {
-        return [[this.x, this.y], [this.ray_endX, this.ray_endY]];
-    }
-
 }
 
 class Polygon {
