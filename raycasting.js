@@ -207,18 +207,24 @@ function draw() {
     debug();
 }
 
+
+
+// Itera pela lista de polígonos concluídos e desenha eles
 function drawFinishedPolygons() {
     for (var i = 0; i < polygonList.length; i++) {
         polygonList[i].drawPolygon();
     }
 }
 
+// Itera pela lista de polígonos concluídos e desenha eles
 function drawFinishedRays(){
     for (var r = 0; r < rayList.length; r++) {
         rayList[r].drawRay();
     }
 }
 
+
+// Responsável pela orquestração da mudança de estado do programa
 function keyPressed() {
     console.log(key);
     switch (key) {
@@ -237,6 +243,8 @@ function keyPressed() {
     }
 }
 
+
+// Orquestra as ações de clique no mouse
 function mousePressed() {
     
     switch (state) {
@@ -250,9 +258,11 @@ function mousePressed() {
 
             switch (rayInConstruction.state) {
                 case "POSITION":
+                    // Marca a origem como a origem desejada
                     rayInConstruction.addOrigin(mouseX, mouseY);
                     break;
                 case "DIRECTION":
+                    // Marca a direção como a direção desejada
                     rayInConstruction.addRay(mouseX, mouseY);
                     break;
             }
@@ -263,6 +273,7 @@ function mousePressed() {
     
 }
 
+// Orquestra as ações de clique duplo
 function doubleClicked() {
     
     switch (state) {
@@ -280,6 +291,7 @@ function doubleClicked() {
     
 }
 
+// Código responsável pela indicação das interseções entre linhas existentes
 function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
     // Fonte para a teoria matemática por trás da função: http://paulbourke.net/geometry/pointlineplane/
 
@@ -313,6 +325,7 @@ function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
     }
 }
 
+// Itera sobre todos os lados de todos os polígonos, e calcula a possível interseção destes com os raios existentes
 function raycasting() {
     for (p = 0; p < polygonList.length; p++){
         console.log(p);
@@ -327,6 +340,7 @@ function raycasting() {
     }
 }
 
+// Retorna e escreve o estado do programa no HTML da página
 function debug() {
     document.getElementById("state").innerHTML = state;
 }
