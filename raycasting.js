@@ -160,11 +160,6 @@ function draw() {
 
     let c = color(0, 50);
     fill(c);
-
-    line(50,50, 100, 100);
-    line(50,100, 100, 50);
-
-    lineIntersection([50,50], [100,100], [50,100], [100,50]);
     
     raycasting();
     drawFinishedPolygons();
