@@ -62,16 +62,24 @@ class Ray {
 
     }
 
+    getRayLine() {
+        return [[this.x, this.y], [this.ray_endX, this.ray_endY]];
+    }
+
 }
 
 class Polygon {
 
     constructor() {
         this.vertex_list = [];
+        this.vertex_count = 1;
+        this.side_count = 0;
     }
 
     addVertex(x_coord, y_coord) {
         this.vertex_list.push([x_coord, y_coord]);
+        this.vertex_count++;
+        this.side_count++;
     }
 
     drawPolygon() {
@@ -100,6 +108,21 @@ class Polygon {
         polygonList.push(polygonInConstruction);
         polygonInConstruction = new Polygon();  
 
+    }
+
+    getSide(side_number) {
+        let vertex1;
+        let vertex2;
+        
+        if (side_number < this.side_count-1) {
+            vertex1 = this.vertex_list[side_number];
+            vertex2 = this.vertex_list[side_number+1];
+        } else {
+            vertex1 = this.vertex_list[side_number];
+            vertex2 = this.vertex_list[0];
+        }
+
+        return [vertex1, vertex2];
     }
 
 }
@@ -143,6 +166,7 @@ function draw() {
 
     lineIntersection([50,50], [100,100], [50,100], [100,50]);
     
+    raycasting();
     drawFinishedPolygons();
     drawFinishedRays(); 
 
@@ -259,7 +283,6 @@ function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
 
     ua = ua_numerator / ua_denominator;
     ub = ub_numerator / ub_denominator;
-
     // Das anotações
     // The equations apply to lines, if the intersection of line segments is required then it is only necessary to test if ua and ub lie between 0 and 1. 
     // Whichever one lies within that range then the corresponding line segment contains the intersection point. If both lie within the range of 0 to 1 then the intersection point is within both line segments.
@@ -269,6 +292,20 @@ function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
         circleY = y1 + (ua * (y2 - y1));
     
         circle(circleX,circleY, 20);
+    }
+}
+
+function raycasting() {
+    for (p = 0; p < polygonList.length; p++){
+        console.log(p);
+        for (s = 0; s < polygonList[p].side_count; s++) {
+            for (r = 0; r < rayList.length; r++){
+                let rayLine = rayList[r].getRayLine()
+                let sideLine = polygonList[p].getSide(s);
+
+                lineIntersection(rayLine[0], rayLine[1], sideLine[0], sideLine[1]);
+            }
+        }
     }
 }
 
