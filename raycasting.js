@@ -47,6 +47,9 @@ class Ray {
     }
 
 
+
+    // As funções abaixo só serão utilizadas durante a construção do raio
+
     // Estabelece o desenho do raío ainda em construção
     drawRayConstruction(){
         switch (this.state) {
@@ -74,20 +77,19 @@ class Ray {
     }
 }
 
+// Define a classe que encapsulará o polígono
 class Polygon {
 
     constructor() {
+        // Lista que armazena todos os vértices
         this.vertex_list = [];
+
+        // Determina a contagem de vértices e lados (arestas)
         this.vertex_count = 1;
         this.side_count = 0;
     }
 
-    addVertex(x_coord, y_coord) {
-        this.vertex_list.push([x_coord, y_coord]);
-        this.vertex_count++;
-        this.side_count++;
-    }
-
+    // Método responsável pelo desenho do polígono concluído na tela
     drawPolygon() {
         beginShape();
         for (var v = 0; v < this.vertex_list.length; v++){
@@ -96,26 +98,11 @@ class Polygon {
         endShape(CLOSE); 
     }
 
-
-
-    // Métodos chamados apenas durante a construção do polígono
-
-    drawPolygonConstruction() {
-        beginShape();
-        for (var v = 0; v < this.vertex_list.length; v++){
-            vertex(this.vertex_list[v][0], this.vertex_list[v][1]);
-        }
-        vertex(mouseX, mouseY);
-        endShape(CLOSE);    
-    }
-
-    finishConstruction() {
-
-        polygonList.push(polygonInConstruction);
-        polygonInConstruction = new Polygon();  
-
-    }
-
+    // Retorna um dos lados do polígono
+    // Lado 0 -> vértices 0 e 1
+    // Lado 1 -> vértices 1 e 2 
+    // ...
+    // Lado n -> vértices n e 0
     getSide(side_number) {
         let vertex1;
         let vertex2;
@@ -129,6 +116,35 @@ class Polygon {
         }
 
         return [vertex1, vertex2];
+    }
+
+
+
+    // Métodos chamados apenas durante a construção do polígono
+    
+    // Adiciona um novo vértice ao polígono
+    addVertex(x_coord, y_coord) {
+        this.vertex_list.push([x_coord, y_coord]);
+        this.vertex_count++;
+        this.side_count++;
+    }
+
+    // Desenha o polígono ainda em construção
+    drawPolygonConstruction() {
+        beginShape();
+        for (var v = 0; v < this.vertex_list.length; v++){
+            vertex(this.vertex_list[v][0], this.vertex_list[v][1]);
+        }
+        vertex(mouseX, mouseY);
+        endShape(CLOSE);    
+    }
+
+    // Conclui a construção do polígono
+    finishConstruction() {
+
+        polygonList.push(polygonInConstruction);
+        polygonInConstruction = new Polygon();  
+
     }
 
 }
@@ -168,6 +184,7 @@ function draw() {
     fill(c);
     
     raycasting();
+    
     drawFinishedPolygons();
     drawFinishedRays(); 
 
