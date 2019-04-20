@@ -21,8 +21,8 @@ class Ray {
     // Recebe as coordenadas 
     addRay(x_coord, y_coord) {
         this.angle = atan2(y_coord - this.y, x_coord - this.x);
-        this.ray_endX = this.x + cos(this.angle) * max_size;
-        this.ray_endY = this.y + sin(this.angle) * max_size;
+        this.ray_endX = this.x + cos(this.angle) * max_size * 5;
+        this.ray_endY = this.y + sin(this.angle) * max_size * 5;
 
         this.state = "DONE";
         
@@ -41,8 +41,8 @@ class Ray {
                 circle(this.x, this.y, 10);
                 
                 var temp_angle = atan2(mouseY - this.y, mouseX - this.x);
-                var temp_endX = this.x + cos(temp_angle) * max_size;
-                var temp_endY = this.y + sin(temp_angle) * max_size;
+                var temp_endX = this.x + cos(temp_angle) * max_size * 5;
+                var temp_endY = this.y + sin(temp_angle) * max_size * 5;
                 
                 line(this.x, this.y, temp_endX, temp_endY);
                 
