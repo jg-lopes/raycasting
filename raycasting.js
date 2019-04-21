@@ -36,8 +36,34 @@ class Ray {
 
     // Desenha o raio já construído no display
     drawRay() {
-        circle(this.x, this.y, 15);
-        line(this.x, this.y, this.ray_endX, this.ray_endY);
+        fill(color("#5B483A"));
+        circle(this.x, this.y, 20);
+
+        stroke(0);
+        line(this.x + 10 * cos(this.angle), this.y + 10 * sin(this.angle), this.ray_endX, this.ray_endY);
+
+
+        strokeWeight(5);
+        strokeCap(SQUARE);
+        //fill(color("#5B483A"));
+
+        push();
+
+        stroke("#5B483A");
+        translate(this.x, this.y);
+        rotate(this.angle);
+        
+        triangle(40, 0, 32, 5, 32, -5);
+        
+        strokeWeight(5);
+        line(10, 0, 30, 0);
+
+        pop();
+        //line(this.x + 12 * cos(this.angle), this.y + 12 * sin(this.angle), this.x + 30 * cos(this.angle), this.y + 30 * sin(this.angle));
+        
+        
+        strokeWeight(1);
+        stroke(0);
     }
 
 
@@ -54,11 +80,11 @@ class Ray {
     drawRayConstruction(){
         switch (this.state) {
             case "POSITION":
-                circle(mouseX, mouseY, 15);
+                circle(mouseX, mouseY, 20);
 
                 break;
             case "DIRECTION":
-                circle(this.x, this.y, 15);
+                circle(this.x, this.y, 20);
                 
                 var temp_angle = atan2(mouseY - this.y, mouseX - this.x);
                 var temp_endX = this.x + cos(temp_angle) * max_size * 5;
@@ -172,6 +198,8 @@ let polygonInConstruction = new Polygon();
 
 function setup() {
     createCanvas(640, 480);
+
+    angleMode(DEGREES);
 
     max_size = max(width, height);
 }
