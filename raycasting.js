@@ -246,15 +246,27 @@ function keyPressed() {
     switch (key) {
         case 'a':
             state = "DEFAULT";
+
+            rayInConstruction = new Ray();
+            polygonInConstruction = new Polygon();
             break;
         case 's':
             state = "CREATING_SHAPE";
+
+            rayInConstruction = new Ray();
+            polygonInConstruction = new Polygon();
             break;
         case 'd':
             state = "CREATING_RAY";
+
+            rayInConstruction = new Ray();
+            polygonInConstruction = new Polygon();
             break;
         case 'f':
             state = "EDIT";
+
+            rayInConstruction = new Ray();
+            polygonInConstruction = new Polygon();
             break;
     }
 }
