@@ -165,38 +165,55 @@ let polygonList = [];
 // Cada índice representa um objeto Ray
 let rayList = [];
 
+
 // Armazenam objetos que estão temporáriamente em construção
 let rayInConstruction = new Ray();
 let polygonInConstruction = new Polygon();
 
 function setup() {
-    createCanvas(640, 480); 
-    background(200); 
+    createCanvas(640, 480);
 
     max_size = max(width, height);
 }
 
 function draw() {
     
-    background(200);     
+    background("#E7DFB9");     
 
-    let c = color(0, 50);
-    fill(c);
+    // Parâmetros do desenho de polígonos
+    let p_fill = color("#D68649");
+    p_fill.setAlpha(200);
+
+    fill(p_fill);
+    drawFinishedPolygons();
     
+    // Parâmetros do desenho dos raios
+    let r_fill = color("#343127");
+    
+    fill(r_fill);
+    drawFinishedRays(); 
+
+    // Parâmetros da interseção do raycasting
+    let cast_fill = color("#D68649");
+    
+    fill(cast_fill);
     raycasting();
     
-    drawFinishedPolygons();
-    drawFinishedRays(); 
 
     switch (state) {
         case "DEFAULT":
             break;
 
         case "CREATING_SHAPE":
+
+            // Parâmetros do desenho de polígonos
+            fill(p_fill);
             polygonInConstruction.drawPolygonConstruction();
             break;
 
         case "CREATING_RAY":
+            // Parâmetros da interseção do raycasting
+            fill(r_fill);
             rayInConstruction.drawRayConstruction();
             break;
             
@@ -226,7 +243,6 @@ function drawFinishedRays(){
 
 // Responsável pela orquestração da mudança de estado do programa
 function keyPressed() {
-    console.log(key);
     switch (key) {
         case 'a':
             state = "DEFAULT";
@@ -295,6 +311,8 @@ function doubleClicked() {
 function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
     // Fonte para a teoria matemática por trás da função: http://paulbourke.net/geometry/pointlineplane/
 
+    intersectionList = [];
+
     x1 = l1_start[0];
     x2 = l1_end[0];
     x3 = l2_start[0];
@@ -320,22 +338,46 @@ function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
     if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
         circleX = x1 + (ua * (x2 - x1));
         circleY = y1 + (ua * (y2 - y1));
-    
-        circle(circleX,circleY, 20);
+
+        return [circleX, circleY];
     }
+
 }
 
 // Itera sobre todos os lados de todos os polígonos, e calcula a possível interseção destes com os raios existentes
+// Desenha na tela os círculos de interseção
 function raycasting() {
-    for (p = 0; p < polygonList.length; p++){
-        console.log(p);
-        for (s = 0; s < polygonList[p].side_count; s++) {
-            for (r = 0; r < rayList.length; r++){
-                let rayLine = rayList[r].getRayLine()
-                let sideLine = polygonList[p].getSide(s);
 
-                lineIntersection(rayLine[0], rayLine[1], sideLine[0], sideLine[1]);
+    // Lista de listas, guardando multiplas Polygon intersection lists
+    let intersectionList = [];
+    // Guarda todas as interseções existentes entre polígonos e raios
+    // Quando troca de polígono, uma nova lista é criada
+    let polygonIntersectionList = [];
+
+    let rayLine, sideLine, intersectionResult;
+    for (r = 0; r < rayList.length; r++){
+
+        for (p = 0; p < polygonList.length; p++){
+
+            polygonIntersectionList = [];
+            
+            for (s = 0; s < polygonList[p].side_count; s++) {
+                rayLine = rayList[r].getRayLine();
+                sideLine = polygonList[p].getSide(s);
+                intersectionResult = lineIntersection(rayLine[0], rayLine[1], sideLine[0], sideLine[1]);
+
+                // Se existe interseção
+                if (intersectionResult != undefined) {
+                    polygonIntersectionList.push(intersectionResult);
+                }
             }
+            intersectionList.push(polygonIntersectionList);
+        }
+    }
+
+    for (p = 0; p < intersectionList.length; p++) {
+        for (i = 0; i < intersectionList[p].length; i++) {
+            circle(intersectionList[p][i][0], intersectionList[p][i][1], 10);
         }
     }
 }
