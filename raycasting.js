@@ -339,7 +339,7 @@ function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
         intersectionX = x1 + (ua * (x2 - x1));
         intersectionY = y1 + (ua * (y2 - y1));
 
-        return [intersectionX, intersectionY];
+        return [intersectionX, intersectionY, ua];
     }
 
 }
@@ -404,6 +404,8 @@ function intersectionDraw(rayIntersectionList) {
 
     for (r = 0; r < rayIntersectionList.length; r++) {
         
+        rayPoint = [rayList[r].x, rayList[r].y];
+        
         for (p = 0; p < rayIntersectionList[r].length; p++) {
             
             // O uso de duas cores diferentes se intercalando pode ser satisfatório
@@ -412,13 +414,12 @@ function intersectionDraw(rayIntersectionList) {
             // Caso esteja marcado como cor de entrada, nada é feito
             // Caso esse ponto esteja marcado com a cor de saída, invertemos as cores de TODOS os pontos
 
-            rayPoint = [rayList[r].x, rayList[r].y];
 
             if (rayIntersectionList[r][p] != undefined) {
                 
                 temp = rayIntersectionList[r][p];
 
-                ldp = lowestDistancePoint(rayPoint, temp);
+                temp = sortByDistance(temp);
                 
                 for (i = 0; i < temp.length; i++) {
                    
@@ -467,18 +468,14 @@ function raycasting() {
     // }
 }
 
-function lowestDistancePoint(pointReference, pointList) {
-    min_dist = Number.MAX_SAFE_INTEGER;
-    min_index = 0;
+// Organiza os pontos da lista 
+function sortByDistance (list) {
+    list.sort (function (intersection1, intersection2) {
+        if (intersection1[2] > intersection2[2]) return 1;
+        if (intersection1[2] < intersection2[2]) return -1;
+    });
 
-    for (p = 0; p < pointList.length; p++) {
-        if (dist(pointReference[0], pointReference[1], pointList[p][0], pointList[p][1]) < min_dist) {
-            min_dist = dist(pointReference[0], pointReference[1], pointList[p][0], pointList[p][1]);
-            min_index = p;
-        }
-    }
-
-    return min_index;
+    return list;
 }
 
 
