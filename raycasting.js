@@ -414,12 +414,12 @@ function intersectionDraw(rayIntersectionList) {
             // Ua representa em que lugar do segmento de reta foi encontrada a interseção 
             // Ua próximo de zero -> interseção perto da origem do segmento de reta (origem do raio)
             // Usamos isso para criar uma função de sortByDistance que organiza a lista baseada nessa informação
-            
+
             if (rayIntersectionList[r][p] != undefined) {
                 
                 rayIntersectionsInPolygon = rayIntersectionList[r][p];
 
-                rayIntersectionsInPolygon = sortByDistance(temp);
+                rayIntersectionsInPolygon = sortByDistance(rayIntersectionsInPolygon);
                 
                 for (i = 0; i < rayIntersectionsInPolygon.length; i++) {
                    
