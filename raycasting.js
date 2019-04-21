@@ -336,10 +336,10 @@ function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
     // Whichever one lies within that range then the corresponding line segment contains the intersection point. If both lie within the range of 0 to 1 then the intersection point is within both line segments.
 
     if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
-        circleX = x1 + (ua * (x2 - x1));
-        circleY = y1 + (ua * (y2 - y1));
+        intersectionX = x1 + (ua * (x2 - x1));
+        intersectionY = y1 + (ua * (y2 - y1));
 
-        return [circleX, circleY];
+        return [intersectionX, intersectionY];
     }
 
 }
