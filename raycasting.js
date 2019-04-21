@@ -377,6 +377,13 @@ function raycasting() {
 
     for (p = 0; p < intersectionList.length; p++) {
         for (i = 0; i < intersectionList[p].length; i++) {
+            
+            // Avalia se está entrando ou saindo do polígono
+            if (i % 2 == 0) {
+                fill(color(0));
+            } else {
+                fill(color(255));
+            }
             circle(intersectionList[p][i][0], intersectionList[p][i][1], 10);
         }
     }
