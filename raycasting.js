@@ -339,6 +339,7 @@ function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
         intersectionX = x1 + (ua * (x2 - x1));
         intersectionY = y1 + (ua * (y2 - y1));
 
+        // Retorna ua para poder encontrar quais são os pontos mais próximos do raio
         return [intersectionX, intersectionY, ua];
     }
 
@@ -408,20 +409,19 @@ function intersectionDraw(rayIntersectionList) {
         
         for (p = 0; p < rayIntersectionList[r].length; p++) {
             
-            // O uso de duas cores diferentes se intercalando pode ser satisfatório
-            // Entretanto, apenas intercalar as cores não é suficiente para garantir que a cor de entrada seja sempre a mesma
-            // Para isso, vamos encontrar sempre o ponto de interseção mais próximo euclideanamente da origem do raio
-            // Caso esteja marcado como cor de entrada, nada é feito
-            // Caso esse ponto esteja marcado com a cor de saída, invertemos as cores de TODOS os pontos
-
-
+            // Para implementar as cores de entrada e saída, precisamos saber em qual ordem o raio faz interseção com o polígono
+            // Para isso, usamos a distância ua do cálculo da interseção de semiretas
+            // Ua representa em que lugar do segmento de reta foi encontrada a interseção 
+            // Ua próximo de zero -> interseção perto da origem do segmento de reta (origem do raio)
+            // Usamos isso para criar uma função de sortByDistance que organiza a lista baseada nessa informação
+            
             if (rayIntersectionList[r][p] != undefined) {
                 
-                temp = rayIntersectionList[r][p];
+                rayIntersectionsInPolygon = rayIntersectionList[r][p];
 
-                temp = sortByDistance(temp);
+                rayIntersectionsInPolygon = sortByDistance(temp);
                 
-                for (i = 0; i < temp.length; i++) {
+                for (i = 0; i < rayIntersectionsInPolygon.length; i++) {
                    
                     // Intercala as cores
                     if (i % 2 == 0) {
@@ -430,7 +430,7 @@ function intersectionDraw(rayIntersectionList) {
                         fill(exitColor);
                     }
 
-                    circle(temp[i][0], temp[i][1], 10);
+                    circle(rayIntersectionsInPolygon[i][0], rayIntersectionsInPolygon[i][1], 10);
                 }
                 
             }
@@ -446,26 +446,6 @@ function raycasting() {
     foundIntersections = intersectionSearch();
 
     intersectionDraw(foundIntersections);
-
-
-    // console.log(intersectionList);
-    // for (p = 0; p < intersectionList.length; p++) {
-    //     for (i = 0; i < intersectionList[p].length; i++) {
-
-    //         // Procura o ponto de interseção mais próximo do raio
-    //         // Sabemos que esse ponto deve ser o ponto de cor de entrada
-    //         // Após ele, toda interseção deve alternar entre cor de saída e cor de entrada
-
-    //         // Avalia se está entrando ou saindo do polígono
-    //         if (i % 2 == 0) {
-    //             fill(color(0));
-    //         } else {
-    //             fill(color(255));
-    //         }
-
-    //         circle(intersectionList[p][i][0], intersectionList[p][i][1], 10);
-    //     }
-    // }
 }
 
 // Organiza os pontos da lista 
