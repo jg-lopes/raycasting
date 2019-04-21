@@ -36,7 +36,7 @@ class Ray {
 
     // Desenha o raio já construído no display
     drawRay() {
-        circle(this.x, this.y, 10);
+        circle(this.x, this.y, 15);
         line(this.x, this.y, this.ray_endX, this.ray_endY);
     }
 
@@ -54,11 +54,11 @@ class Ray {
     drawRayConstruction(){
         switch (this.state) {
             case "POSITION":
-                circle(mouseX, mouseY, 10);
+                circle(mouseX, mouseY, 15);
 
                 break;
             case "DIRECTION":
-                circle(this.x, this.y, 10);
+                circle(this.x, this.y, 15);
                 
                 var temp_angle = atan2(mouseY - this.y, mouseX - this.x);
                 var temp_endX = this.x + cos(temp_angle) * max_size * 5;
@@ -344,50 +344,144 @@ function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
 
 }
 
+// Procura por todos elementos gerados (raios e polígonos) por interseções
+// Os armazena em uma estrutura hierárquica chamada rayIntersectionList
+function intersectionSearch () {
+    
+    // Dados armazenados em estrutura hierárquica
+    // rayIntersectionList tem índice representando um raio, seguindo a ordem de rayList
+    // Cada raio possui uma lista de polígonos, contendo informações sobre todos os polígonos criados (presentes na PolygonList)
+    // Cada polígono possui informações sobre as interseções contidas entre o raio e o polígono
+    // Cada interseção possui o ponto x e y onde ocorre a interseção
+
+    let rayIntersectionList = [];
+    let polygonIntersectionList = [];
+    let sideIntersectionList = [];
+
+    let rayLine, sideLine, intersectionResult;
+
+    // Primeira parte da função de raycasting, responsável por procurar interseções
+    // Procura interseções em todo espaço gerado e as organiza na intersectionList
+    for (r = 0; r < rayList.length; r++){
+        
+        // Pega posição em x, y da origem do raio e do seu "fim"
+        rayLine = rayList[r].getRayLine();
+
+        polygonIntersectionList = []; 
+
+        for (p = 0; p < polygonList.length; p++){
+
+            sideIntersectionList = [];
+            
+            for (s = 0; s < polygonList[p].side_count; s++) {
+                // Pega semireta que descreve o lado
+                sideLine = polygonList[p].getSide(s);
+
+                // Calcula a interseção e retorna sua posição
+                // Retorna undefined se não existir
+                intersectionResult = lineIntersection(rayLine[0], rayLine[1], sideLine[0], sideLine[1]);
+                
+                // Remove casos onde não há interseção
+                if (intersectionResult != undefined) {
+                    sideIntersectionList.push(intersectionResult);
+                }
+            }
+
+            polygonIntersectionList.push(sideIntersectionList);
+        }
+
+        rayIntersectionList.push(polygonIntersectionList);
+    }
+
+    return rayIntersectionList;
+}
+
+// Desenha na tela as interseções encontradas, seguindo regras de cor para entrada e saída
+function intersectionDraw(rayIntersectionList) {
+
+    entryColor = color(0);
+    exitColor = color(255);
+
+    for (r = 0; r < rayIntersectionList.length; r++) {
+        
+        for (p = 0; p < rayIntersectionList[r].length; p++) {
+            
+            // O uso de duas cores diferentes se intercalando pode ser satisfatório
+            // Entretanto, apenas intercalar as cores não é suficiente para garantir que a cor de entrada seja sempre a mesma
+            // Para isso, vamos encontrar sempre o ponto de interseção mais próximo euclideanamente da origem do raio
+            // Caso esteja marcado como cor de entrada, nada é feito
+            // Caso esse ponto esteja marcado com a cor de saída, invertemos as cores de TODOS os pontos
+
+            rayPoint = [rayList[r].x, rayList[r].y];
+
+            if (rayIntersectionList[r][p] != undefined) {
+                
+                temp = rayIntersectionList[r][p];
+
+                ldp = lowestDistancePoint(rayPoint, temp);
+                
+                for (i = 0; i < temp.length; i++) {
+                   
+                    // Intercala as cores
+                    if (i % 2 == 0) {
+                        fill(entryColor);
+                    } else {
+                        fill(exitColor);
+                    }
+
+                    circle(temp[i][0], temp[i][1], 10);
+                }
+                
+            }
+        }
+
+    }
+}
+
 // Itera sobre todos os lados de todos os polígonos, e calcula a possível interseção destes com os raios existentes
 // Desenha na tela os círculos de interseção
 function raycasting() {
 
-    // Lista de listas, guardando multiplas Polygon intersection lists
-    let intersectionList = [];
-    // Guarda todas as interseções existentes entre polígonos e raios
-    // Quando troca de polígono, uma nova lista é criada
-    let polygonIntersectionList = [];
+    foundIntersections = intersectionSearch();
 
-    let rayLine, sideLine, intersectionResult;
-    for (r = 0; r < rayList.length; r++){
+    intersectionDraw(foundIntersections);
 
-        for (p = 0; p < polygonList.length; p++){
 
-            polygonIntersectionList = [];
-            
-            for (s = 0; s < polygonList[p].side_count; s++) {
-                rayLine = rayList[r].getRayLine();
-                sideLine = polygonList[p].getSide(s);
-                intersectionResult = lineIntersection(rayLine[0], rayLine[1], sideLine[0], sideLine[1]);
+    // console.log(intersectionList);
+    // for (p = 0; p < intersectionList.length; p++) {
+    //     for (i = 0; i < intersectionList[p].length; i++) {
 
-                // Se existe interseção
-                if (intersectionResult != undefined) {
-                    polygonIntersectionList.push(intersectionResult);
-                }
-            }
-            intersectionList.push(polygonIntersectionList);
-        }
-    }
+    //         // Procura o ponto de interseção mais próximo do raio
+    //         // Sabemos que esse ponto deve ser o ponto de cor de entrada
+    //         // Após ele, toda interseção deve alternar entre cor de saída e cor de entrada
 
-    for (p = 0; p < intersectionList.length; p++) {
-        for (i = 0; i < intersectionList[p].length; i++) {
-            
-            // Avalia se está entrando ou saindo do polígono
-            if (i % 2 == 0) {
-                fill(color(0));
-            } else {
-                fill(color(255));
-            }
-            circle(intersectionList[p][i][0], intersectionList[p][i][1], 10);
-        }
-    }
+    //         // Avalia se está entrando ou saindo do polígono
+    //         if (i % 2 == 0) {
+    //             fill(color(0));
+    //         } else {
+    //             fill(color(255));
+    //         }
+
+    //         circle(intersectionList[p][i][0], intersectionList[p][i][1], 10);
+    //     }
+    // }
 }
+
+function lowestDistancePoint(pointReference, pointList) {
+    min_dist = Number.MAX_SAFE_INTEGER;
+    min_index = 0;
+
+    for (p = 0; p < pointList.length; p++) {
+        if (dist(pointReference[0], pointReference[1], pointList[p][0], pointList[p][1]) < min_dist) {
+            min_dist = dist(pointReference[0], pointReference[1], pointList[p][0], pointList[p][1]);
+            min_index = p;
+        }
+    }
+
+    return min_index;
+}
+
+
 
 // Retorna e escreve o estado do programa no HTML da página
 function debug() {
