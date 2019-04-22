@@ -41,27 +41,24 @@ class Ray {
 
         stroke(0);
         strokeWeight(1);
-        //line(this.x + 10 * cos(this.angle), this.y + 10 * sin(this.angle), this.ray_endX, this.ray_endY);
         this.drawDottedLine(3);
 
-        strokeWeight(5);
-        strokeCap(SQUARE);
-        //fill(color("#5B483A"));
+        
 
         push();
 
         stroke("#5B483A");
+        strokeWeight(5);
+        strokeCap(SQUARE);
+
         translate(this.x, this.y);
         rotate(this.angle);
-        
         triangle(40, 0, 32, 5, 32, -5);
         
         strokeWeight(5);
         line(10, 0, 30, 0);
 
         pop();
-        //line(this.x + 12 * cos(this.angle), this.y + 12 * sin(this.angle), this.x + 30 * cos(this.angle), this.y + 30 * sin(this.angle));
-        
         
         strokeWeight(1);
         stroke(0);
@@ -262,6 +259,7 @@ function draw() {
             break;
             
         case "EDIT":
+            drawEditPoints();
             break; 
     }
 
@@ -282,6 +280,23 @@ function drawFinishedRays(){
     for (var r = 0; r < rayList.length; r++) {
         rayList[r].drawRay();
     }
+}
+
+// Desenha todos os pontos passíveis de interação no modo de edição
+function drawEditPoints () {
+    fill(color(255, 0, 0));
+
+    rayList.forEach( function(ray) {
+        circle(ray.x, ray.y, 8);
+        circle(ray.x + cos(ray.angle) * 40, ray.y + sin(ray.angle) * 40, 8);
+    });
+
+    polygonList.forEach ( function (polygon) {
+        polygon.vertex_list.forEach (function(vertex) {
+            circle(vertex[0], vertex[1], 8);
+        });
+    });
+    
 }
 
 
