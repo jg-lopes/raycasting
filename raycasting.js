@@ -296,7 +296,7 @@ function drawEditPoints () {
             circle(vertex[0], vertex[1], 8);
         });
     });
-    
+
 }
 
 
@@ -333,31 +333,31 @@ function keyPressed() {
 
 // Orquestra as ações de clique no mouse
 function mousePressed() {
-    
-    switch (state) {
-        case "DEFAULT":
-            break;
-        case "CREATING_SHAPE":
-            // Indica que o usuário quer desenhar uma figura e armazena o ponto atual do cursor como vértice a se desenhar
-            polygonInConstruction.addVertex(mouseX, mouseY);
-            break;
-        case "CREATING_RAY":
+    if (0 < mouseX && mouseX < width && 0 < mouseY && mouseY < height) {
+        switch (state) {
+            case "DEFAULT":
+                break;
+            case "CREATING_SHAPE":
+                // Indica que o usuário quer desenhar uma figura e armazena o ponto atual do cursor como vértice a se desenhar
+                polygonInConstruction.addVertex(mouseX, mouseY);
+                break;
+            case "CREATING_RAY":
 
-            switch (rayInConstruction.state) {
-                case "POSITION":
-                    // Marca a origem como a origem desejada
-                    rayInConstruction.addOrigin(mouseX, mouseY);
-                    break;
-                case "DIRECTION":
-                    // Marca a direção como a direção desejada
-                    rayInConstruction.addRay(mouseX, mouseY);
-                    break;
-            }
+                switch (rayInConstruction.state) {
+                    case "POSITION":
+                        // Marca a origem como a origem desejada
+                        rayInConstruction.addOrigin(mouseX, mouseY);
+                        break;
+                    case "DIRECTION":
+                        // Marca a direção como a direção desejada
+                        rayInConstruction.addRay(mouseX, mouseY);
+                        break;
+                }
 
-        case "EDIT":
-            break; 
+            case "EDIT":
+                break; 
+        }
     }
-    
 }
 
 // Orquestra as ações de clique duplo
