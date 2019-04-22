@@ -40,8 +40,9 @@ class Ray {
         circle(this.x, this.y, 20);
 
         stroke(0);
-        line(this.x + 10 * cos(this.angle), this.y + 10 * sin(this.angle), this.ray_endX, this.ray_endY);
-
+        strokeWeight(1);
+        //line(this.x + 10 * cos(this.angle), this.y + 10 * sin(this.angle), this.ray_endX, this.ray_endY);
+        this.drawDottedLine(3);
 
         strokeWeight(5);
         strokeCap(SQUARE);
@@ -66,6 +67,21 @@ class Ray {
         stroke(0);
     }
 
+    // Desenha uma linha pontilhada da origem ao destino
+    drawDottedLine(line_size) {
+
+        let splits = 5 * max_size / line_size;
+
+        push();
+        translate(this.x, this.y);
+        rotate(this.angle);
+        for (let i = 0; i < splits * 2; i += 2) {
+            line(10 + i * line_size, 0, 10 + (i + 1) * line_size, 0);
+        }
+        pop();
+
+
+    }
 
     // Retorna a linha da origem do raio até o ponto de fim do raio (fora da tela)
     getRayLine() {
