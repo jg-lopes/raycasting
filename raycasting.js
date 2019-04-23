@@ -204,8 +204,10 @@ let polygonList = [];
 let rayList = [];
 
 // Armazena o objeto que está sendo arrastado
+// Evita que o mouse saia da area do objeto arrastado sem que o objeto atualize para sua nova posição
+    // causando uma experiência ruim para o usuário (não soltou o botão do mouse mas parou de arrastar)
 // Formato -> tipo do objeto (vírgula) índice (indice do raio OU indice do poligono (virgula) indice do vértice)
-// Tipos de objeto -> rc pra ray center, ra pra ray angle, v pra vertex
+// Tipos de objeto -> rc pra ray center, ra pra ray angle, v pra vertex, fp pra full polygon
 // Em formato string para facilitar comparação nas funções de drag
 let currentDrag = ""
 
@@ -297,6 +299,8 @@ function drawEditPoints () {
 
     let diameter = 8;
 
+    let intersectionCount = 0;
+
     for (var r = 0; r < rayList.length; r++) {
 
         if ( currentDrag == ("rc," + r) || (dist(rayList[r].x, rayList[r].y, mouseX, mouseY) < diameter/2 && mouseIsPressed && currentDrag == "") )  {
@@ -336,16 +340,36 @@ function drawEditPoints () {
             
             if ( currentDrag == ("v," + p + "," + v) || (dist(vertex_var[0], vertex_var[1], mouseX, mouseY) < diameter/2 && mouseIsPressed && currentDrag == "") )  {
             
-                //console.log(polygonList[p].vertex_list);
-            
                 currentDrag = "v," + p + "," + v;
             
                 polygonList[p].vertex_list[v] = [mouseX, mouseY];
                 
             }
+            circle(vertex_var[0], vertex_var[1], diameter);   
+        }
 
+        for (s = 0; s < polygonList[p].side_count; s++) {
+            // Pega semireta que descreve o lado
+            sideLine = polygonList[p].getSide(s);
 
-            circle(vertex_var[0], vertex_var[1], diameter);
+            // Calcula a interseção e retorna sua posição
+            // Retorna undefined se não existir
+            intersectionResult = lineIntersection([-10, -10], [mouseX, mouseY], sideLine[0], sideLine[1]);
+            
+            // Remove casos onde não há interseção
+            if (intersectionResult != undefined) {
+                intersectionCount++;
+            }
+        }
+
+        if (currentDrag == ("fp,"+p) || intersectionCount % 2 == 1 && mouseIsPressed) {
+            
+            currentDrag = "fp," + p;
+            
+            for (v = 0; v < polygonList[p].vertex_list.length; v++) {
+                polygonList[p].vertex_list[v][0] -= pwinMouseX - winMouseX;
+                polygonList[p].vertex_list[v][1] -= pwinMouseY - winMouseY;
+            }
         }
     }
 
