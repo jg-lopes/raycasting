@@ -21,16 +21,21 @@ Cursor não possui interatividade com a tela
 #### Modo de criação de formas
 
 Clique na tela para introduzir um ponto que será uma extremidade de um polígono. 
+
 Repita a inserção de um novo vértice quantas vezes desejado. 
+
 Clique duplo para concluir o polígono.
 
 #### Modo de criação de raios 
 
 Clique na tela para posicionar a origem desejada do raio. 
+
 Segure e arraste para definir o raio desejado.
 
 #### Modo de edição 
 
 Clique e arraste em um dos pontos vermelhos que surgirão na tela para modificar a posição daquele ponto.
+
 Alternativamente, clique e arraste em um polígono para movimentá-lo.
+
 Podem ser editadas apenas as localizações dos vértices dos polígonos e a origem e o ângulo dos raios.
