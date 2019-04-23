@@ -36,7 +36,6 @@ class Ray {
 
     // Desenha o raio já construído no display
     drawRay() {
-        fill(color("#5B483A"));
         circle(this.x, this.y, 20);
 
         stroke(0);
@@ -233,8 +232,14 @@ function draw() {
     fill(p_fill);
     drawFinishedPolygons();
     
+    if (state == "CREATING_SHAPE") {
+        // Parâmetros do desenho de polígonos
+        fill(p_fill);
+        polygonInConstruction.drawPolygonConstruction();
+    }
+
     // Parâmetros do desenho dos raios
-    let r_fill = color("#343127");
+    let r_fill = color("#5B483A");
     
     fill(r_fill);
     drawFinishedRays(); 
@@ -252,9 +257,6 @@ function draw() {
 
         case "CREATING_SHAPE":
 
-            // Parâmetros do desenho de polígonos
-            fill(p_fill);
-            polygonInConstruction.drawPolygonConstruction();
             break;
 
         case "CREATING_RAY":
