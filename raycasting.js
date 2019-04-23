@@ -336,6 +336,9 @@ function drawEditPoints () {
 
             rayList[r].x = mouseX;
             rayList[r].y = mouseY;
+            
+            rayList[r].ray_endX = rayList[r].x + cos(rayList[r].angle) * max_size * 5;
+            rayList[r].ray_endY = rayList[r].y + sin(rayList[r].angle) * max_size * 5;
 
         }
         circle(rayList[r].x, rayList[r].y, diameter);
