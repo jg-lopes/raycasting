@@ -328,7 +328,8 @@ function drawEditPoints () {
 
     let intersectionCount = 0;
 
-    for (var r = 0; r < rayList.length; r++) {
+    // Ordem reversa pois elementos introduzidos "acima" de outros são priorizados
+    for (var r = rayList.length-1; r >= 0; r--) {
 
         if ( currentDrag == ("rc," + r) || (dist(rayList[r].x, rayList[r].y, mouseX, mouseY) < diameter/2 && mouseIsPressed && currentDrag == "") )  {
             
@@ -362,7 +363,8 @@ function drawEditPoints () {
         circle(rayList[r].x + cos(rayList[r].angle) * 40, rayList[r].y + sin(rayList[r].angle) * 40, diameter);
     }
 
-    for (let p = 0; p < polygonList.length; p++) {
+    // Ordem reversa pois elementos introduzidos "acima" de outros são priorizados
+    for (let p = polygonList.length-1; p >= 0; p--) {
         for (let v = 0; v < polygonList[p].vertex_list.length; v++) {
             
             vertex_var = polygonList[p].vertex_list[v];
