@@ -205,7 +205,7 @@ let polygonList = [];
 let rayList = [];
 
 // Armazena o objeto que está sendo arrastado
-// Formato -> tipo do objeto (vírgula) índice
+// Formato -> tipo do objeto (vírgula) índice (indice do raio OU indice do poligono (virgula) indice do vértice)
 // Tipos de objeto -> rc pra ray center, ra pra ray angle, v pra vertex
 // Em formato string para facilitar comparação nas funções de drag
 let currentDrag = ""
@@ -297,21 +297,19 @@ function drawEditPoints () {
 
     for (var r = 0; r < rayList.length; r++) {
 
-        if ( currentDrag == "rc," + r || dist(rayList[r].x, rayList[r].y, mouseX, mouseY) < diameter/2 && mouseIsPressed )  {
+        if ( currentDrag == ("rc," + r) || (dist(rayList[r].x, rayList[r].y, mouseX, mouseY) < diameter/2 && mouseIsPressed && currentDrag == "") )  {
             
             currentDrag = "rc," + r;
-            fill(0,255,0);
+
             rayList[r].x = mouseX;
             rayList[r].y = mouseY;
-            fill(color(255, 0, 0));
 
         }
         circle(rayList[r].x, rayList[r].y, diameter);
 
-        if ( currentDrag == "ra," + r || dist(rayList[r].x + cos(rayList[r].angle) * 40, rayList[r].y + sin(rayList[r].angle) * 40, mouseX, mouseY) < diameter/2 && mouseIsPressed )  {
-            
+        if ( currentDrag == ("ra," + r) || (dist(rayList[r].x + cos(rayList[r].angle) * 40, rayList[r].y + sin(rayList[r].angle) * 40, mouseX, mouseY) < diameter/2 && mouseIsPressed && currentDrag == ""))  {
+
             currentDrag = "ra," + r;
-            fill(0,255,0);
     
             // Angulo do raio em relação à horizontal
             rayList[r].angle = atan2(mouseY - rayList[r].y, mouseX - rayList[r].x);
@@ -322,19 +320,32 @@ function drawEditPoints () {
             rayList[r].ray_endY = rayList[r].y + sin(rayList[r].angle) * max_size * 5;
 
             
-            fill(color(255, 0, 0));
 
         }
 
         circle(rayList[r].x + cos(rayList[r].angle) * 40, rayList[r].y + sin(rayList[r].angle) * 40, diameter);
     }
 
-    polygonList.forEach ( function (polygon) {
-        polygon.vertex_list.forEach (function(vertex) {
+    for (let p = 0; p < polygonList.length; p++) {
+        for (let v = 0; v < polygonList[p].vertex_list.length; v++) {
+            
+            vertex_var = polygonList[p].vertex_list[v];
+            
+            
+            if ( currentDrag == ("v," + p + "," + v) || (dist(vertex_var[0], vertex_var[1], mouseX, mouseY) < diameter/2 && mouseIsPressed && currentDrag == "") )  {
+            
+                //console.log(polygonList[p].vertex_list);
+            
+                currentDrag = "v," + p + "," + v;
+            
+                polygonList[p].vertex_list[v] = [mouseX, mouseY];
+                
+            }
 
-            circle(vertex[0], vertex[1], diameter);
-        });
-    });
+
+            circle(vertex_var[0], vertex_var[1], diameter);
+        }
+    }
 
 }
 
