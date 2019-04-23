@@ -2,22 +2,26 @@
     <head>
         <script src="./p5.js"></script>
         <script src="raycasting.js"></script>
+        <style>
+            .center {
+                text-align: center;
+            } 
+            #state {
+                font-weight: bold;
+            }
+        </style>
     </head>
     <body>
-        <div>
+        <div class="center" >
             Atalhos do teclado:<br>
-            Modo default - tecla "a"<br>
-            Modo de criação de formas - tecla "s"<br>
-            Modo de criação de raios - tecla "d"<br>
-            Modo de edição - tecla "f"<br>
+            Modo de Visualização - tecla "a"<br>
+            Modo de Criação de Polígono - tecla "s"<br>
+            Modo de Criação de Raio - tecla "d"<br>
+            Modo de Edição - tecla "f"<br>
+
+            <br>
+
+            Modo Atual:<br>
+            <span id="state"></span>
         </div>
-        
-        <br>
-        <br>
-        <br>
-        
-        <div>
-            Estado do programa = <span id="state"></span>
-        </div>
-    </body>
 </html>

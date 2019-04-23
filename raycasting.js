@@ -637,5 +637,18 @@ function sortByDistance (list) {
 
 // Retorna e escreve o estado do programa no HTML da página
 function debug() {
-    document.getElementById("state").innerHTML = state;
+    switch (state) {
+        case "DEFAULT":
+            document.getElementById("state").innerHTML = "Modo de Visualização";
+            break;
+        case "CREATING_SHAPE":
+            document.getElementById("state").innerHTML = "Modo de Criação de Polígono";
+            break;
+        case "CREATING_RAY":
+            document.getElementById("state").innerHTML = "Modo de Criação de Raio";
+            break;
+        case "EDIT":
+            document.getElementById("state").innerHTML = "Modo de Edição";
+            break; 
+    }
 }
