@@ -362,7 +362,7 @@ function drawEditPoints () {
             }
         }
 
-        if (currentDrag == ("fp,"+p) || intersectionCount % 2 == 1 && mouseIsPressed) {
+        if (currentDrag == ("fp,"+p ) || intersectionCount % 2 == 1 && mouseIsPressed && currentDrag == "") {
             
             currentDrag = "fp," + p;
             
@@ -443,6 +443,10 @@ function doubleClicked() {
         case "DEFAULT":
             break;
         case "CREATING_SHAPE":
+            // Remove o segundo clicque do duplo clique
+            polygonInConstruction.vertex_list.splice(-1,1);
+            polygonInConstruction.vertex_count--;
+            polygonInConstruction.side_count--;
             // Chama o método que finaliza a construção do polígono
             polygonInConstruction.finishConstruction();
             break;
