@@ -40,7 +40,7 @@ class Ray {
 
         stroke(0);
         strokeWeight(1);
-        this.drawDottedLine(3);
+        this.drawDottedLine(3, this.angle);
 
         
 
@@ -64,13 +64,13 @@ class Ray {
     }
 
     // Desenha uma linha pontilhada da origem ao destino
-    drawDottedLine(line_size) {
+    drawDottedLine(line_size, angle) {
 
         let splits = 5 * max_size / line_size;
 
         push();
         translate(this.x, this.y);
-        rotate(this.angle);
+        rotate(angle);
         for (let i = 0; i < splits * 2; i += 2) {
             line(10 + i * line_size, 0, 10 + (i + 1) * line_size, 0);
         }
@@ -96,13 +96,35 @@ class Ray {
 
                 break;
             case "DIRECTION":
+            
+                let temp_angle = atan2(mouseY - this.y, mouseX - this.x);
                 circle(this.x, this.y, 20);
+
+                stroke(0);
+                strokeWeight(1);
+                this.drawDottedLine(3, temp_angle);
+
                 
-                var temp_angle = atan2(mouseY - this.y, mouseX - this.x);
-                var temp_endX = this.x + cos(temp_angle) * max_size * 5;
-                var temp_endY = this.y + sin(temp_angle) * max_size * 5;
+
+                push();
+
+                stroke("#5B483A");
+                strokeWeight(5);
+                strokeCap(SQUARE);
+
+                translate(this.x, this.y);
+                rotate(temp_angle);
+                triangle(40, 0, 32, 5, 32, -5);
                 
-                line(this.x, this.y, temp_endX, temp_endY);
+                strokeWeight(5);
+                line(10, 0, 30, 0);
+
+                pop();
+                
+                strokeWeight(1);
+                stroke(0);
+                
+                //line(this.x, this.y, temp_endX, temp_endY);
                 
                 break;
         }
@@ -443,7 +465,7 @@ function doubleClicked() {
         case "DEFAULT":
             break;
         case "CREATING_SHAPE":
-            // Remove o segundo clicque do duplo clique
+            // Remove o segundo clique do duplo clique
             polygonInConstruction.vertex_list.splice(-1,1);
             polygonInConstruction.vertex_count--;
             polygonInConstruction.side_count--;
