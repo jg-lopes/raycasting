@@ -238,16 +238,20 @@ let rayInConstruction = new Ray();
 let polygonInConstruction = new Polygon();
 
 function setup() {
-    createCanvas(0.98 * windowWidth, 0.75 *windowHeight);
+    let cnv = createCanvas(0.95*windowWidth, 0.7*windowHeight);
 
     angleMode(DEGREES);
 
+    cnv.parent('sketch-holder');
     max_size = max(width, height);
 }
 
+function windowResized() {
+    resizeCanvas(0.95*windowWidth, 0.7*windowHeight);
+}
+
 function draw() {
-    resizeCanvas(0.98 *windowWidth, 0.75 *windowHeight);
-    
+   
     background("#E7DFB9");     
 
     // Parâmetros do desenho de polígonos

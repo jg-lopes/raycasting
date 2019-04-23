@@ -9,19 +9,51 @@
             #state {
                 font-weight: bold;
             }
+            .tablecenter {
+                margin-left:auto; 
+                margin-right:auto;
+            }
         </style>
     </head>
     <body>
         <div class="center" >
+            <b>Raycasting</b><br>
+            Instruções detalhadas de uso disponíveis no <a href="https://github.com/jg-lopes/raycasting">Github</a> do projeto<br><br>
             Atalhos do teclado:<br>
-            Modo de Visualização - tecla "a"<br>
-            Modo de Criação de Polígono - tecla "s"<br>
-            Modo de Criação de Raio - tecla "d"<br>
-            Modo de Edição - tecla "f"<br>
+            <table class="tablecenter">
+                <tr>
+                    <td>
+                        Modo de Visualização - tecla "a"
+                    </td>
+                    <td>
+                        ||
+                    </td>
+                    <td>
+                        Modo de Criação de Polígono - tecla "s"
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Modo de Criação de Raio - tecla "d"
+                    </td>
+                    <td>
+                        ||
+                    </td>
+                    <td>
+                        Modo de Edição - tecla "f"
+                    </td>
+                </tr>
+            </table>
 
             <br>
 
             Modo Atual:<br>
             <span id="state"></span>
+
+            <div id="sketch-holder">
+                    <!-- Our sketch will go here! -->
+            </div>
+            <p>Feito por João Gabriel Lopes de Oliveira para a disciplina de Computação Gráfica (EEL882) - 2019.1</p>
+            </body>
         </div>
 </html>
