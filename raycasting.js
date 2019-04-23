@@ -204,6 +204,11 @@ let polygonList = [];
 // Cada índice representa um objeto Ray
 let rayList = [];
 
+// Armazena o objeto que está sendo arrastado
+// Formato -> tipo do objeto (vírgula) índice
+// Tipos de objeto -> rc pra ray center, ra pra ray angle, v pra vertex
+// Em formato string para facilitar comparação nas funções de drag
+let currentDrag = ""
 
 // Armazenam objetos que estão temporáriamente em construção
 let rayInConstruction = new Ray();
@@ -260,6 +265,8 @@ function draw() {
             
         case "EDIT":
             drawEditPoints();
+
+            if (mouseIsPressed == false) currentDrag = "";
             break; 
     }
 
@@ -286,14 +293,46 @@ function drawFinishedRays(){
 function drawEditPoints () {
     fill(color(255, 0, 0));
 
-    rayList.forEach( function(ray) {
-        circle(ray.x, ray.y, 8);
-        circle(ray.x + cos(ray.angle) * 40, ray.y + sin(ray.angle) * 40, 8);
-    });
+    let diameter = 8;
+
+    for (var r = 0; r < rayList.length; r++) {
+
+        if ( currentDrag == "rc," + r || dist(rayList[r].x, rayList[r].y, mouseX, mouseY) < diameter/2 && mouseIsPressed )  {
+            
+            currentDrag = "rc," + r;
+            fill(0,255,0);
+            rayList[r].x = mouseX;
+            rayList[r].y = mouseY;
+            fill(color(255, 0, 0));
+
+        }
+        circle(rayList[r].x, rayList[r].y, diameter);
+
+        if ( currentDrag == "ra," + r || dist(rayList[r].x + cos(rayList[r].angle) * 40, rayList[r].y + sin(rayList[r].angle) * 40, mouseX, mouseY) < diameter/2 && mouseIsPressed )  {
+            
+            currentDrag = "ra," + r;
+            fill(0,255,0);
+    
+            // Angulo do raio em relação à horizontal
+            rayList[r].angle = atan2(mouseY - rayList[r].y, mouseX - rayList[r].x);
+
+            // Pontos "finais" do raio, necessários para o desenho
+            // Multiplicados por 5 * max_size (maior dimensão da tela) para dar a ilusão que o raio é infinito
+            rayList[r].ray_endX = rayList[r].x + cos(rayList[r].angle) * max_size * 5;
+            rayList[r].ray_endY = rayList[r].y + sin(rayList[r].angle) * max_size * 5;
+
+            
+            fill(color(255, 0, 0));
+
+        }
+
+        circle(rayList[r].x + cos(rayList[r].angle) * 40, rayList[r].y + sin(rayList[r].angle) * 40, diameter);
+    }
 
     polygonList.forEach ( function (polygon) {
         polygon.vertex_list.forEach (function(vertex) {
-            circle(vertex[0], vertex[1], 8);
+
+            circle(vertex[0], vertex[1], diameter);
         });
     });
 
@@ -377,6 +416,7 @@ function doubleClicked() {
     }
     
 }
+
 
 // Código responsável pela indicação das interseções entre linhas existentes
 function lineIntersection(l1_start, l1_end, l2_start, l2_end) {
