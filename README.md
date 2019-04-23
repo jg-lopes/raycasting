@@ -1,6 +1,6 @@
 # Raycasting
 
-Este projeto representa um trabalho de Raycasting para a disciplina de Computação Gráfica (EEL882) ministrada pelo Prof. Cláudio Esperança. O trabalho visa estudar e implementar um ambiente interativo para demonstração do uso da técnica de raycasting. 
+Este projeto representa um trabalho de Raycasting para a disciplina de Computação Gráfica (EEL882) ministrada pelo Prof. Cláudio Esperança em 2019.1. O trabalho visa estudar e implementar um ambiente interativo para demonstração do uso da técnica de raycasting. 
 
 O projeto foi feito em Javascript com o auxílio da biblioteca p5. O arquivo p5.js se refere a biblioteca e não é de minha autoria e apenas foi incluído no repositório para facilidade de instalação (mais informações no site do p5 - https://p5js.org/)
 
@@ -30,12 +30,14 @@ Clique duplo para concluir o polígono.
 
 Clique na tela para posicionar a origem desejada do raio. 
 
-Segure e arraste para definir o raio desejado.
+Mova o mouse para o ângulo desejado para o raio.
+
+Clique novamente para confirmar.
 
 #### Modo de edição 
 
 Clique e arraste em um dos pontos vermelhos que surgirão na tela para modificar a posição daquele ponto.
 
-Alternativamente, clique e arraste em um polígono para movimentá-lo.
+Podem ser editados os pontos dos vértices dos polígonos e a origem e o ângulo dos raios.
 
-Podem ser editadas apenas as localizações dos vértices dos polígonos e a origem e o ângulo dos raios.
+Alternativamente, clique e arraste em um polígono para movimentá-lo.
