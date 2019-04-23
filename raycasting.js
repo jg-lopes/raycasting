@@ -238,7 +238,7 @@ let rayInConstruction = new Ray();
 let polygonInConstruction = new Polygon();
 
 function setup() {
-    createCanvas(640, 480);
+    createCanvas(0.98 * windowWidth, 0.75 *windowHeight);
 
     angleMode(DEGREES);
 
@@ -246,6 +246,7 @@ function setup() {
 }
 
 function draw() {
+    resizeCanvas(0.98 *windowWidth, 0.75 *windowHeight);
     
     background("#E7DFB9");     
 
