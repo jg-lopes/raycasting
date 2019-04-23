@@ -297,7 +297,7 @@ function draw() {
             break; 
     }
 
-    debug();
+    returnState();
 }
 
 
@@ -402,24 +402,28 @@ function drawEditPoints () {
 // Responsável pela orquestração da mudança de estado do programa
 function keyPressed() {
     switch (key) {
+        case 'A':
         case 'a':
             state = "DEFAULT";
 
             rayInConstruction = new Ray();
             polygonInConstruction = new Polygon();
             break;
+        case 'S':
         case 's':
             state = "CREATING_SHAPE";
 
             rayInConstruction = new Ray();
             polygonInConstruction = new Polygon();
             break;
+        case 'D':
         case 'd':
             state = "CREATING_RAY";
 
             rayInConstruction = new Ray();
             polygonInConstruction = new Polygon();
             break;
+        case 'F':
         case 'f':
             state = "EDIT";
 
@@ -636,7 +640,7 @@ function sortByDistance (list) {
 
 
 // Retorna e escreve o estado do programa no HTML da página
-function debug() {
+function returnState() {
     switch (state) {
         case "DEFAULT":
             document.getElementById("state").innerHTML = "Modo de Visualização";
