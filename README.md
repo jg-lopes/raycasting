@@ -1,43 +1,43 @@
 # Raycasting
 
-Este projeto representa um trabalho de Raycasting para a disciplina de Computação Gráfica (EEL882) ministrada pelo Prof. Cláudio Esperança em 2019.1. O trabalho visa estudar e implementar um ambiente interativo para demonstração do uso da técnica de raycasting. 
+This project represents a Raycasting assignment for the Computer Graphics course (EEL882) taught by Prof. Claudio Esperança in 2019.1. The work aims to study and implement an interactive environment to demonstrate the use of the raycasting technique. 
 
-O projeto foi feito em Javascript com o auxílio da biblioteca p5. O arquivo p5.js se refere a biblioteca e não é de minha autoria e apenas foi incluído no repositório para facilidade de instalação (mais informações no site do p5 - https://p5js.org/)
+The project was made in Javascript with the help of the p5 library. The file p5.js refers to the library and is not of my authorship and was only included in the repository for ease of installation (more information on the p5 website - https://p5js.org/)
 
-## Instalação
+## Installation
 
-Para instalar o software, basta apenas clonar o repositório e abrir a página "index.html" em um navegador com compatibilidade para o uso da biblioteca p5.
+To install the software, just clone the repository and open the "index.html" page in a browser that supports the p5 library.
 
-O projeto foi programado e testado no navegador Chrome (versão 70.0.3538.77)
+The project was programmed and tested on the Chrome browser (version 70.0.3538.77)
 
-## Funcionalidades básicas
+## Basic functionality
 
-O projeto funciona a partir do uso de um dos 4 modos de edição:
+The project works by using one of the 4 editing modes:
 
-#### Modo Padrão
+#### Standard Mode
 
-Cursor não possui interatividade com a tela
+Cursor does not interact with the screen
 
-#### Modo de criação de formas
+#### Shape Creation Mode
 
-Clique na tela para introduzir um ponto que será uma extremidade de um polígono. 
+Click on the canvas to insert a point that will be an edge of a polygon. 
 
-Repita a inserção de um novo vértice quantas vezes desejado. 
+Repeat inserting a new vertex as many times as desired. 
 
-Clique duplo para concluir o polígono.
+Double-click to complete the polygon.
 
-#### Modo de criação de raios 
+#### Radius Creation Mode 
 
-Clique na tela para posicionar a origem desejada do raio. 
+Click on the canvas to position the desired origin of the ray. 
 
-Mova o mouse para o ângulo desejado para o raio.
+Move the mouse to the desired angle for the ray.
 
-Clique novamente para confirmar.
+Click again to confirm.
 
-#### Modo de edição 
+#### Edit mode 
 
-Clique e arraste em um dos pontos vermelhos que surgirão na tela para modificar a posição daquele ponto.
+Click and drag on one of the red points that appear on the screen to modify the position of that point.
 
-Podem ser editados os pontos dos vértices dos polígonos e a origem e o ângulo dos raios.
+The vertex points of polygons and the origin and angle of rays can be edited.
 
-Alternativamente, clique e arraste em um polígono para movimentá-lo.
+Alternatively, click and drag on a polygon to move it.
